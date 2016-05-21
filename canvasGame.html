@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="utf-8">
+     <title>Canvas Game</title>
+</head>
+
+<body>
+     <canvas id="myCanvas" width="512" height="480"></canvas>
+
+     <script>
+     var theCanvas = document.getElementById('myCanvas');
+     var ctx = theCanvas.getContext("2d");
+
+     var heroImage = new Image();
+     heroImage.src = 'images/hero.png';
+
+     var monsterImage = new Image();
+     monsterImage.src = 'images/monster.png';
+
+     var myBackground = new Image();
+     myBackground.src = 'images/background.png';
+
+     var heroX = 250;
+     var heroY = 250;
+     var speed = 10; //originally 5
+
+     var monsterX = 150;
+     var monsterY = 100;
+
+     var counter = 0;
+     var direction = 0;
+
+     var hit = 0;
+
+     window.addEventListener('keydown', function(e) {
+          var key = e.keyCode;
+          if (key === 37) { // left
+               if (heroX < -30) {
+                    heroX = 510;
+               } else {
+                    heroX -= speed;
+               }
+          }
+          if (key === 39) { // right
+               if (heroX > 510) {
+                    heroX = -30;
+               } else {
+                    heroX += speed;
+               }
+          }
+          if (key === 38) { // up
+               if (heroY < 0) {
+                    heroY = 475;
+               } else {
+                    heroY -= speed;
+               }
+          }
+          if (key === 40) { // down
+               if (heroY > 475) {
+                    heroY = 0;
+               } else {
+                    heroY += speed;
+               }
+          }
+     });
+     function main(){
+          // ctx.fillStyle = 'white';
+          // ctx.fillRect(0, 0, 500, 500);
+          ctx.drawImage(myBackground, 0, 0);
+
+          ctx.drawImage(heroImage, heroX, heroY);
+
+          ctx.drawImage(monsterImage, monsterX, monsterY);
+
+          if (counter === 50) {
+               direction = Math.floor((Math.random() * 8) + 1);
+
+               counter = 0;
+
+          } else {
+               if(direction === 1){ //left
+                    monsterX--;
+               } else if(direction === 2){ //up
+                    monsterY--;
+               } else if(direction === 3){ // right
+                    monsterX++;
+               } else if(direction === 4){ //down
+                    monsterY++;
+               } else if(direction === 5){ //move northwest quadrant
+                    monsterX--;
+                    monsterY--;
+               } else if(direction === 6){ //move southwest quadrant
+                    monsterX--;
+                    monsterY++;
+               } else if(direction === 7){ // move northeast quadrant
+                    monsterX++;
+                    monsterY--;
+               } else if(direction === 8){ //move southeast quadrant
+                    monsterY++;
+                    monsterX++;
+               }
+               counter++;
+          }
+
+          // Reset the game when the player catches a monster
+          var reset = function () {
+               //heroX = myCanvas.width / 2;
+               //heroY = myCanvas.height / 2;
+
+               // Throw the monster somewhere on the screen randomly
+               monsterX = 32 + (Math.random() * (myCanvas.width - 64));
+               monsterY = 32 + (Math.random() * (myCanvas.height - 64));
+          };
+
+          //see when hero gets monster
+          if
+          (
+               heroX <= (monsterX + 32)
+               && monsterX <= (heroX + 32)
+               && heroY <= (monsterY + 32)
+               && monsterY <= (heroY + 32)
+          ) {
+               hit++;
+               console.log(hit);
+               console.log("hit");
+               reset();
+          }
+
+
+          /* are we about to run off the page? */
+
+          if (monsterX > 512) {
+               monsterX = 0;
+          }
+          if (monsterX < 0) {
+               monsterX = 512;
+          }
+          if(monsterY > 480) {
+               monsterY = 0;
+          }
+          if (monsterY < 0) {
+               monsterY = 480;
+          }
+          // else {
+          //      monsterY++;
+          // }
+          requestAnimationFrame(main);
+     };
+     main();
+
+
+     </script>
+</body>
+</html>
