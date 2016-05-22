@@ -7,8 +7,8 @@
 
 <body>
      <canvas id="myCanvas" width="512" height="480"></canvas>
-
      <script>
+
      var theCanvas = document.getElementById('myCanvas');
      var ctx = theCanvas.getContext("2d");
 
@@ -21,8 +21,11 @@
      var myBackground = new Image();
      myBackground.src = 'images/background.png';
 
+
+
      var heroX = 250;
      var heroY = 250;
+
      var speed = 10; //originally 5
 
      var monsterX = 150;
@@ -31,10 +34,11 @@
      var counter = 0;
      var direction = 0;
 
-     var hit = 0;
+     var score = 0;
 
      window.addEventListener('keydown', function(e) {
           var key = e.keyCode;
+
           if (key === 37) { // left
                if (heroX < -30) {
                     heroX = 510;
@@ -65,13 +69,14 @@
           }
      });
      function main(){
-          // ctx.fillStyle = 'white';
-          // ctx.fillRect(0, 0, 500, 500);
           ctx.drawImage(myBackground, 0, 0);
 
           ctx.drawImage(heroImage, heroX, heroY);
 
           ctx.drawImage(monsterImage, monsterX, monsterY);
+
+          ctx.font = "30px serif";
+          ctx.fillText("Score: " + score, 32, 50)
 
           if (counter === 50) {
                direction = Math.floor((Math.random() * 8) + 1);
@@ -121,18 +126,19 @@
                && heroY <= (monsterY + 32)
                && monsterY <= (heroY + 32)
           ) {
-               hit++;
-               console.log(hit);
-               console.log("hit");
+               score++;
+
+               console.log(heroX + ', ' + heroY);
+               console.log(monsterX + ', ' + monsterY);
                reset();
           }
-
 
           /* are we about to run off the page? */
 
           if (monsterX > 512) {
                monsterX = 0;
           }
+
           if (monsterX < 0) {
                monsterX = 512;
           }
@@ -142,9 +148,7 @@
           if (monsterY < 0) {
                monsterY = 480;
           }
-          // else {
-          //      monsterY++;
-          // }
+
           requestAnimationFrame(main);
      };
      main();
