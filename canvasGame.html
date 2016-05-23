@@ -18,6 +18,9 @@
      var monsterImage = new Image();
      monsterImage.src = 'images/monster.png';
 
+     var goblinImage = new Image();
+     goblinImage.src = 'images/monster.png';
+
      var myBackground = new Image();
      myBackground.src = 'images/background.png';
 
@@ -26,15 +29,23 @@
      var heroX = 250;
      var heroY = 250;
 
-     var speed = 10; //originally 5
+     var speed = 5; //originally 5
 
      var monsterX = 150;
      var monsterY = 100;
 
+     var goblinX = 350;
+     var goblinY = 100;
+
      var counter = 0;
      var direction = 0;
+     var goblinDir = 0;goblinDir
 
      var score = 0;
+     //MAKES HERO MOVE AROUND
+     // window.addEventListener('keyup', function(e){
+     //      var key - event.keycode
+     // }
 
      window.addEventListener('keydown', function(e) {
           var key = e.keyCode;
@@ -75,35 +86,60 @@
 
           ctx.drawImage(monsterImage, monsterX, monsterY);
 
-          ctx.font = "30px serif";
+          ctx.drawImage(goblinImage, goblinX, goblinY);
+
+          ctx.font = "30px sans-serif";
+
           ctx.fillText("Score: " + score, 32, 50)
 
           if (counter === 50) {
                direction = Math.floor((Math.random() * 8) + 1);
+               goblinDir = Math.floor((Math.random() * 8) + 1);
 
                counter = 0;
 
           } else {
                if(direction === 1){ //left
-                    monsterX--;
+                    monsterX -= speed; //multiply xspeed
                } else if(direction === 2){ //up
-                    monsterY--;
+                    monsterY -= speed;
                } else if(direction === 3){ // right
-                    monsterX++;
+                    monsterX += speed;
                } else if(direction === 4){ //down
-                    monsterY++;
+                    monsterY += speed;
                } else if(direction === 5){ //move northwest quadrant
-                    monsterX--;
-                    monsterY--;
+                    monsterX -= speed;
+                    monsterY -= speed;
                } else if(direction === 6){ //move southwest quadrant
-                    monsterX--;
-                    monsterY++;
+                    monsterX -= speed;
+                    monsterY += speed;
                } else if(direction === 7){ // move northeast quadrant
-                    monsterX++;
-                    monsterY--;
+                    monsterX += speed;
+                    monsterY -= speed;
                } else if(direction === 8){ //move southeast quadrant
-                    monsterY++;
-                    monsterX++;
+                    monsterY += speed;
+                    monsterX += speed;
+               }
+               if(goblinDir === 1){ //left
+                    goblinX -= speed; //multiply xspeed
+               } else if(goblinDir === 2){ //up
+                    goblinY -= speed;
+               } else if(goblinDir === 3){ // right
+                    goblinX += speed;
+               } else if(goblinDir === 4){ //down
+                    goblinY += speed;
+               } else if(goblinDir === 5){ //move northwest quadrant
+                    goblinX -= speed;
+                    goblinY -= speed;
+               } else if(goblinDir === 6){ //move southwest quadrant
+                    goblinX -= speed;
+                    goblinY += speed;
+               } else if(goblinDir === 7){ // move northeast quadrant
+                    goblinX += speed;
+                    goblinY -= speed;
+               } else if(goblinDir === 8){ //move southeast quadrant
+                    goblinY += speed;
+                    goblinX += speed;
                }
                counter++;
           }
@@ -127,13 +163,46 @@
                && monsterY <= (heroY + 32)
           ) {
                score++;
-
                console.log(heroX + ', ' + heroY);
                console.log(monsterX + ', ' + monsterY);
                reset();
           }
 
+          //WRITE A FUNCTION THAT TAKES AN OBJECT TO WRAP THE MONSTER AND heroX
+
+          function handleWrapping(object){
+
+               if (object.x > 512){
+                    object.x = 0;
+               }
+               if (object.x < 0){
+                    object.x
+               }
+               if (object.y > 480){
+                    object.y = 0;
+               }
+               if (object.y < 0){
+                    object.y = 480;
+               }
+
+          }
+
+
           /* are we about to run off the page? */
+
+          if (goblinX > 512) {
+               goblinX = 0;
+          }
+
+          if (goblinX < 0) {
+               goblinX = 512;
+          }
+          if(goblinY > 480) {
+               goblinY = 0;
+          }
+          if (goblinY < 0) {
+               goblinY = 480;
+          }
 
           if (monsterX > 512) {
                monsterX = 0;
